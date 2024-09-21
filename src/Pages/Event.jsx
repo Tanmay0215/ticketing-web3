@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import { useEffect,useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import Loader from "../Components/Loader";
 const Event = ()=>{
     const [item,setitem] = useState({});
     const { id } = useParams();
+    const [loading,setLoading] = useState(true)
     console.log(id)
 
     useEffect(() => {
@@ -23,12 +25,16 @@ const Event = ()=>{
             }
           };
           fetchEvents();
+          setLoading(false);
         }, []);
 
-    return (
-        <div className="bg-black h-screen w-screen">
+        if(loading){
+            return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>)
+        }
+        else{
+        return(<div className="bg-black h-screen w-screen">
             <EventElement item = {item}/>
-        </div>
-    )
+        </div>)
+        }
 }
 export default Event;

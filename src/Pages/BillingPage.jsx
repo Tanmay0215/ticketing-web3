@@ -1,12 +1,11 @@
-// import nftTokenImg from "../../public/magicstudio-art.jpg"
 import BillingEventCard from "../Components/BillingEventCard";
-// import ConnectToMetaMask from "../Components/ConnectToMetaMask";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams , useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import PayEth from "../Components/PayEth";
 import { db } from "../firebase";
+import Loader from "../Components/Loader";
 const BillingPage = () => {
     const navigate = useNavigate();
     const {id} = useParams();
@@ -14,7 +13,11 @@ const BillingPage = () => {
     const [account, setAccount] = useState(null);
     const [user1,setUser1] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [tickets,setTickets] = useState(1);
+    const [tickets, setTickets] = useState(() => {
+        const savedTickets = localStorage.getItem('tickets');
+        return savedTickets ? parseInt(savedTickets) : 1;
+    });
+    const [loading,setLoading] = useState(true)
 
     const connectWallet = async () => {
         if (window.ethereum) {
@@ -32,13 +35,21 @@ const BillingPage = () => {
 
       const decreaseCount = () => {
         if(tickets > 1){
-            setTickets(prev => prev-1);
+            setTickets((prev) => {
+                const updatedTickets = prev - 1;
+                localStorage.setItem('tickets', updatedTickets); // Save to localStorage
+                return updatedTickets;
+            });
         }
     }
 
     const increaseCount = () => {
         if(tickets < 6){
-            setTickets(prev => prev+1);
+            setTickets((prev) => {
+                const updatedTickets = prev + 1;
+                localStorage.setItem('tickets', updatedTickets); // Save to localStorage
+                return updatedTickets;
+            });
         }
     }
 
@@ -68,10 +79,16 @@ const BillingPage = () => {
             }
           });
           fetchEvents();
+          setLoading(false)
           return () => unsubscribe();
         }, []);
 
-    return ( <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
+        if(loading){
+            return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>)
+        }
+        else {
+            return(
+            <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
         <div className="w-10/12 h-[70px] mt-[44px] flex justify-end items-center gap-x-3">
         <button className="px-4 py-2 text-[24px] max-h-[50px] border border-black rounded-md" onClick={connectWallet}>{account ? (<div>{account.slice(0,4) + '...' + account.slice(-4)}</div>):(<div>Connect Wallet</div>)}</button>
         {user1? (<img src={user1.photoURL} className="w-[50px] h-[50px] rounded-full"/>) : (<div className="bg-purple-600 w-[50px] h-[50px] rounded-full"></div>)}
@@ -94,7 +111,7 @@ const BillingPage = () => {
                         <h3 className="uppercase font-bold text-[36px]">Checkout Details</h3>
                         <div className="w-8/12 flex flex-col items-center border-b border-black pb-3 ">
                             <div className="flex justify-between w-full items-center text-[24px] font-semibold">No. Of Tickets : <div className="flex gap-x-3">
-                                                                                                                                    <span className="border border-black rounded-full p-2 px-3" onClick={decreaseCount}>-</span>{tickets}<span className="border border-black rounded-full p-2" onClick={increaseCount}>+</span>
+                                                                                                                                    <div className="border border-black rounded-full h-10 w-10 flex justify-center items-center" onClick={decreaseCount}><div>-</div></div>{tickets}<div className="border border-black rounded-full h-10 w-10 flex justify-center items-center" onClick={increaseCount}><div>+</div></div>
                                                                                                                                 </div></div>
                             <div className="flex justify-between w-full items-center text-[24px] font-semibold">Price : <span>{(item["Price"] * tickets).toFixed(2)}</span></div>
                             <div className="flex justify-between w-full items-center text-[24px] font-semibold">Currency : <span>ETH</span></div>
@@ -111,7 +128,9 @@ const BillingPage = () => {
         <div className="flex mt-[38px] justify-center w-10/12">
             <h1 className="uppercase font-bold text-[48px]">Get yourself a NFT, Buy ticket now !!</h1>
         </div>
-    </div> );
+    </div>
+            )
+        }
 }
  
 export default BillingPage;
