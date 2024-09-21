@@ -12,7 +12,7 @@ const EventCard = ({item})=> {
             <div className='absolute bottom-2 right-4'><NavLink className='bg-[#38884A] h-8 w-24 rounded-md p-1' to = {`/event/${item.id}`}>Book Now</NavLink></div>
         </div>
         <div className="absolute bottom-2 right-4">
-          <button className="bg-[#38884A] h-8 w-24 rounded-md p-1 text-white">
+          <button className="bg-[#38884A] h-10 w-24 rounded-md p-1 text-white">
             Book Now
           </button>
         </div>

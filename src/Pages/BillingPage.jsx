@@ -37,7 +37,7 @@ const BillingPage = () => {
         if(tickets > 1){
             setTickets((prev) => {
                 const updatedTickets = prev - 1;
-                localStorage.setItem('tickets', updatedTickets); // Save to localStorage
+                localStorage.setItem('tickets', updatedTickets); 
                 return updatedTickets;
             });
         }
@@ -47,16 +47,17 @@ const BillingPage = () => {
         if(tickets < 6){
             setTickets((prev) => {
                 const updatedTickets = prev + 1;
-                localStorage.setItem('tickets', updatedTickets); // Save to localStorage
+                localStorage.setItem('tickets', updatedTickets); 
                 return updatedTickets;
             });
         }
     }
 
     useEffect(() => {
+        setLoading(true)
         const fetchEvents = async () => {
             try {
-              const eventsCollection = collection(db, 'EventsInfo'); // Replace 'EventsInfo' with your actual collection name
+              const eventsCollection = collection(db, 'EventsInfo'); 
               const querySnapshot = await getDocs(eventsCollection);
               const eventsData = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
@@ -65,6 +66,9 @@ const BillingPage = () => {
               setitem(eventsData[id-1]);
             } catch (error) {
               console.error('Error fetching events:', error);
+            }
+            finally{
+                setLoading(false)
             }
           };
           const auth = getAuth();
@@ -79,9 +83,8 @@ const BillingPage = () => {
             }
           });
           fetchEvents();
-          setLoading(false)
           return () => unsubscribe();
-        }, []);
+        }, [id]);
 
         if(loading){
             return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>)

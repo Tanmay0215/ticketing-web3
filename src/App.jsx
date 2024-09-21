@@ -1,5 +1,4 @@
 import { Routes,Route } from 'react-router-dom'
-import './App.css'
 import Homepage from './Pages/Homepage'
 import Home from './Pages/Home'
 import Events from './Pages/Events'
@@ -8,6 +7,7 @@ import Login from './Pages/Login'
 import BillingPage from './Pages/BillingPage'
 import NotFound from './Pages/NotFound'
 import Event from './Pages/Event'
+import Payment from './Pages/Payment'
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
           <Route path = '/Login' element = {<Login/>}/>
           <Route path = '/Billing/:id' element = {<BillingPage/>}/>
           <Route path = '/Event/:id' element = {<Event/>}/>
+          <Route path = '/Payment/:id' element = {<Payment/>}/>
           <Route path = '*' element = {<NotFound/>}/>
         </Route>
       </Routes>

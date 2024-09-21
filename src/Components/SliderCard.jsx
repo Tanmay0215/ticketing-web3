@@ -1,10 +1,6 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const SliderCard = ({item})=>{
-    const navigate = useNavigate();
-    const changeHandler = (e)=>{
-        navigate('/')
-    }
     return (
     <div className="relative flex justify-center">
         <div style={{ backgroundImage: `url(${item.Image})` }} className="absolute inset-0 bg-cover bg-center filter blur-3xl z-0"></div>

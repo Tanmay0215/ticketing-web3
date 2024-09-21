@@ -8,6 +8,7 @@ const Events = ()=>{
     const [data, setdata] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
+        setLoading(true)
         const fetchEvents = async () => {
             try {
               const eventsCollection = collection(db, 'EventsInfo'); // Replace 'EventsInfo' with your actual collection name
@@ -18,15 +19,17 @@ const Events = ()=>{
               }));
               console.log(eventsData)
               setdata(eventsData);
-              setLoading(false)
+              
             } catch (error) {
               console.error('Error fetching events:', error);
+            }
+            finally{
+                setLoading(false)
             }
           };
           fetchEvents();
         }, []);
       
-    // return (
         if(loading){
             return (
                 <div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>
