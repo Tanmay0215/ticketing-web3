@@ -1,12 +1,14 @@
 import { useState } from "react";
 import SimpleSlider from "../Components/SignSlider";
 import { NavLink } from "react-router-dom";
-import { signInWithEmailAndPassword} from "firebase/auth";
+import { signInWithEmailAndPassword , GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { auth } from '../firebase'; 
 import toast from "react-hot-toast";
 const Login =()=>{
+    const [user] = useAuthState(auth);
     const navigate = useNavigate();
     const [data,setdata] = useState({email : "" , password : ""});
     const changeHandler = (e)=>{
@@ -26,6 +28,18 @@ const Login =()=>{
         toast.error("Login failed: " + error.message);
     }
     }
+    const signInWithGoogle = () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider).
+        then(()=>{
+            toast.success("LogIn Successfull")
+            navigate('/');
+        })
+        .catch((error) => {
+            console.error("Error Logging in with Google", error);
+            toast.error('LogIn UnSuccessfull')
+          });
+      };
     return(
         <div className="overflow-hidden bg-Siuu w-screen h-screen flex justify-center items-center">
             <div className="w-1/2 my-auto h-screen">
@@ -48,7 +62,7 @@ const Login =()=>{
                     </div>
                 </form>
                 <div className="mt-4">Don't have an account? <NavLink to='/SignUp' className="text-blue-600">SignUp</NavLink></div>
-                <div className="flex justify-between items-center border-black border-2 border-opacity-60 py-1 px-3 rounded-md mt-4 gap-x-3 w-64 cursor-pointer" >
+                <div className="flex justify-between items-center border-black border-2 border-opacity-60 py-1 px-3 rounded-md mt-4 gap-x-3 w-64 cursor-pointer" onClick={()=>{signInWithGoogle()}}>
                     <FcGoogle className="h-8 w-8"/>
                     <div><button>LogIn with Google</button></div>
                     <div>
