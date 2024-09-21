@@ -51,8 +51,8 @@ const SignUp=()=>{
             </div>
             <div className="w-1/2">
             <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold">Create Your Account</div>
-                <form className="w-64 flex flex-col gap-y-8 mt-10">
+                <div className="text-3xl font-bold font-poppins">Create Your Account</div>
+                <form className="w-64 flex flex-col gap-y-4 mt-10">
                 <div className="flex flex-col">
                     <label htmlFor="name" className="text-xl">Name</label>
                     <input type ='text' name = "name" value = {data.name} onChange={changeHandler} id="name" className="h-9 border-2 rounded-lg p-2"></input>
@@ -73,8 +73,8 @@ const SignUp=()=>{
                     <button onClick={submitHandler} className="text-xl">Create Account</button>
                     </div>
                 </form>
-                <div className="mt-4">Already have an account? <NavLink to='/login' className="text-blue-600">Login</NavLink></div>
-                <div className="flex justify-between items-center border-black border-2 border-opacity-60 py-1 px-3 rounded-md mt-4 gap-x-3 w-64 cursor-pointer" onClick={()=>{signInWithGoogle()}} >
+                <div className="mt-4 font-poppins">Already have an account? <NavLink to='/login' className="text-blue-600">Login</NavLink></div>
+                <div className="flex justify-between items-center border-black border-2 border-opacity-60 py-1 px-3 rounded-md mt-4 gap-x-3 w-64 cursor-pointer font-poppins" onClick={()=>{signInWithGoogle()}} >
                     <FcGoogle className="h-8 w-8"/>
                     <div><button>SignUp with Google</button></div>
                     <div>
