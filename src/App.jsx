@@ -18,8 +18,8 @@ function App() {
           <Route path = '/Events' element = {<Events/>}/>
           <Route path = '/Signup' element = {<SignUp/>}/>
           <Route path = '/Login' element = {<Login/>}/>
-          <Route path = '/Billing' element = {<BillingPage/>}/>
-          <Route path = '/Event' element = {<Event/>}/>
+          <Route path = '/Billing/:id' element = {<BillingPage/>}/>
+          <Route path = '/Event/:id' element = {<Event/>}/>
           <Route path = '*' element = {<NotFound/>}/>
         </Route>
       </Routes>
