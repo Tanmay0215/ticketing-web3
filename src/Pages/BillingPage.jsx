@@ -1,9 +1,29 @@
+import { useState } from "react";
 import nftTokenImg from "../../public/magicstudio-art.jpg"
 import BillingEventCard from "../Components/BillingEventCard";
-import ConnectToMetaMask from "../Components/ConnectToMetaMask";
-import { useNavigate } from "react-router-dom";
+import PayEth from "../Components/PayEth";
+// import { useNavigate } from "react-router-dom";
 const BillingPage = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    const [tickets, setTickets] = useState(1);
+    const [account, setAccount] = useState(null);
+
+      const connectWallet = async () => {
+        if (window.ethereum) {
+          try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            setAccount(accounts[0]);
+            console.log('Connected account:', accounts[0]);
+          } catch (error) {
+            console.error('Error connecting to MetaMask:', error);
+          }
+        } else {
+          alert('MetaMask not found. Please install MetaMask!');
+        }
+      };
+
+
+
     const event = {
             "EventName" : "THE ERA'S TOUR",
             "Venue" : "Nala Supara",
@@ -15,10 +35,22 @@ const BillingPage = () => {
             "Price" : 0.4
         }
 
+    const decreaseCount = () => {
+        if(tickets > 1){
+            setTickets(prev => prev-1);
+        }
+    }
+
+    const increaseCount = () => {
+        if(tickets < 6){
+            setTickets(prev => prev+1);
+        }
+    }
+
 
     return ( <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
         <div className="w-10/12 h-[70px] mt-[44px] flex justify-end items-center gap-x-3">
-            <ConnectToMetaMask/>
+        <button className="px-4 py-2 text-[24px] max-h-[50px] border border-black rounded-md" onClick={connectWallet}>{account ? (<div>{account.slice(0,4) + '...' + account.slice(-4)}</div>):(<div>Connect Wallet</div>)}</button>
             <div className="bg-purple-600 w-[50px] h-[50px] rounded-full"></div>
         </div>
         <div className="w-10/12 mt-[20px] flex gap-x-3 flex-col justify-center gap-y-6">
@@ -29,23 +61,25 @@ const BillingPage = () => {
                     <div className="flex flex-col gap-y-2 my-3 overflow-hidden justify-center items-center">
                         <BillingEventCard event={event} />
                     </div>
-                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end" onClick={navigate("/events")}>
+                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end">
                         Browse Events
                     </button>
                 </div>
                 <div className="rounded-md flex flex-col w-6/12 bg-white p-10 justify-between items-center shadow-lg shadow-black">
                         <h3 className="uppercase font-bold text-[36px]">Checkout Details</h3>
                         <div className="w-8/12 flex flex-col items-center border-b border-black pb-3 ">
-                            <div className="flex justify-between w-full items-center text-[24px] font-semibold">No. Of Tickets : </div>
-                            <div className="flex justify-between w-full items-center text-[24px] font-semibold">Price : </div>
+                            <div className="flex justify-between w-full items-center text-[24px] font-semibold">No. Of Tickets : <div className="flex gap-x-3">
+                                                                                                                                    <span className="border border-black rounded-full p-2 px-3" onClick={decreaseCount}>-</span>{tickets}<span className="border border-black rounded-full p-2" onClick={increaseCount}>+</span>
+                                                                                                                                </div></div>
+                            <div className="flex justify-between w-full items-center text-[24px] font-semibold">Price : <span>{(event["Price"] * tickets).toFixed(2)}</span></div>
                             <div className="flex justify-between w-full items-center text-[24px] font-semibold">Currency : <span>ETH</span></div>
                             <div className="flex justify-between w-full items-center text-[24px] font-semibold">NFT Preview : <img className="w-[50px] h-[50px] rounded-full" src={event["PreviewToken"]}/></div>
                         </div>
                         <div className="flex justify-between text-[28px] w-8/12 px-2 pt-1">
                             <span>Total</span>
-                            <div>5 ETH</div>
+                            <div>{(event.Price * tickets).toFixed(2)} ETH</div>
                         </div>
-                        <button className="py-1 px-4 rounded-lg bg-green-500 text-[24px] text-black font-semibold justify-self-end">Pay 1 ETH</button>
+                        {account ? (<PayEth tickets={tickets} event={event} account={account} />) : (<PayEth tickets={tickets} event={event} />)}
                 </div>
             </div>
         </div>
