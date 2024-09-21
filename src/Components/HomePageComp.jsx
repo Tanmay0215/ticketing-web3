@@ -1,7 +1,8 @@
 import React from 'react';
 import Taylor from '../assets/Taylor.jpg'
-
+import { useNavigate } from 'react-router-dom';
 const HomePageComp = () => {
+  const navigate = useNavigate();
   return (<div className=" flex items-center min-h-screen w-screen">
 
       <div className="text-white flex w-10/12 justify-between px-16">
@@ -12,9 +13,9 @@ const HomePageComp = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus imperdiet sed id elementum. Quam vel
             aliquam sit vulputate. Faucibus nec gravida ipsum pulvinar vel.
           </p>
-          <div className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-tl-2xl shadow-lg flex justify-center items-center">
+          <button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-tl-2xl shadow-lg flex justify-center items-center" onClick={()=>{navigate('/Events')}}>
             Browse Events
-          </div>
+          </button>
         </div>
 
         

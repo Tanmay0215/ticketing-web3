@@ -1,7 +1,8 @@
 import { useState } from "react";
 import SimpleSlider from "../Components/SignSlider";
 import { NavLink } from "react-router-dom";
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebase'; 
 const Login =()=>{
     const [data,setdata] = useState({email : "" , password : ""});
     const changeHandler = (e)=>{
@@ -10,11 +11,17 @@ const Login =()=>{
             ...prev,
             [name] : value,
         }))
-        // console.log(data)/
     }
-    const submitHandler = () => {
-        console.log(data)
-        setdata({email : "",password : ""});
+    const submitHandler = async() => {
+        e.preventDefault();
+        setError(null);
+
+        try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Logged in successfully!");
+        } catch (error) {
+        setError("Login failed: " + error.message);
+    }
     }
     return(
         <div className="overflow-hidden bg-Siuu w-screen h-screen flex justify-center items-center">
@@ -27,13 +34,13 @@ const Login =()=>{
                 <form className="w-60 flex flex-col gap-y-10 mt-10">
                     <div className="flex flex-col">
                     <label htmlFor="email" className="text-xl">Email</label>
-                    <input type ='email' name = "email" value = {data.email} onChange={changeHandler} id="email" className="h-8 border-2 rounded-lg"></input>
+                    <input type ='email' name = "email" value = {data.email} onChange={changeHandler} id="email" className="h-9 border-2 rounded-lg p-2"></input>
                     </div>
                     <div className="flex flex-col">
                             <label htmlFor="password" className="text-xl">Password</label>
-                            <input type="password" name="password" value={data.password} onChange={changeHandler} id="password" required className="h-8 border-2 rounded-lg"/>
+                            <input type="password" name="password" value={data.password} onChange={changeHandler} id="password" required className="h-9 border-2 rounded-lg p-2"/>
                         </div>
-                    <div className="flex justify-center items-center h-10 bg-blue-600 rounded-md"> 
+                    <div className="flex justify-center items-center h-12 bg-[#0E64D2] rounded-md"> 
                     <button onClick={submitHandler} className="text-xl">Login</button>
                     </div>
                 </form>
