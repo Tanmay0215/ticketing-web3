@@ -1,5 +1,4 @@
 import NavBar from "../Components/NavBar"; 
-import React from "react";
 import HomePageComp from "../Components/HomePageComp";
 export default function LandingPagePage() {
 return (

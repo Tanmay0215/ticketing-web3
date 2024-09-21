@@ -1,4 +1,3 @@
-import React from 'react';
 import Taylor from '../assets/Taylor.jpg'
 import { useNavigate } from 'react-router-dom';
 const HomePageComp = () => {
