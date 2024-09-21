@@ -2,9 +2,9 @@ import { useState } from "react";
 import nftTokenImg from "../../public/magicstudio-art.jpg"
 import BillingEventCard from "../Components/BillingEventCard";
 import PayEth from "../Components/PayEth";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const BillingPage = () => {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [tickets, setTickets] = useState(1);
     const [account, setAccount] = useState(null);
 
@@ -62,7 +62,9 @@ const BillingPage = () => {
                     <div className="flex flex-col gap-y-2 my-3 overflow-hidden justify-center items-center">
                         <BillingEventCard event={event} />
                     </div>
-                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end">
+                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end" onClick={()=>{
+                        navigate('/Events')
+                    }}>
                         Browse Events
                     </button>
                 </div>
