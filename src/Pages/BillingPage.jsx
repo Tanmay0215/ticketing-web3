@@ -15,7 +15,6 @@ const BillingPage = () => {
             "Price" : 0.4
         }
 
-
     return ( <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
         <div className="w-10/12 h-[70px] mt-[44px] flex justify-end items-center gap-x-3">
             <ConnectToMetaMask/>
@@ -29,7 +28,7 @@ const BillingPage = () => {
                     <div className="flex flex-col gap-y-2 my-3 overflow-hidden justify-center items-center">
                         <BillingEventCard event={event} />
                     </div>
-                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end" onClick={navigate("/events")}>
+                    <button className="py-2 rounded-lg px-4 max-w-[204px] bg-green-500 font-semibold text-[24px] text-black self-end" onClick={()=>navigate("/events")}>
                         Browse Events
                     </button>
                 </div>

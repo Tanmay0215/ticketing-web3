@@ -1,9 +1,13 @@
 import { useState } from "react";
 import SimpleSlider from "../Components/SignSlider";
 import { NavLink } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 import { auth } from '../firebase'; 
+import toast from "react-hot-toast";
 const Login =()=>{
+    const navigate = useNavigate();
     const [data,setdata] = useState({email : "" , password : ""});
     const changeHandler = (e)=>{
         const {name,value} = e.target
@@ -14,13 +18,12 @@ const Login =()=>{
     }
     const submitHandler = async() => {
         e.preventDefault();
-        setError(null);
-
         try {
         await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in successfully!");
+        toast.success("Logged in successfully!");
+        navigate('/')
         } catch (error) {
-        setError("Login failed: " + error.message);
+        toast.error("Login failed: " + error.message);
     }
     }
     return(
@@ -40,11 +43,17 @@ const Login =()=>{
                             <label htmlFor="password" className="text-xl">Password</label>
                             <input type="password" name="password" value={data.password} onChange={changeHandler} id="password" required className="h-9 border-2 rounded-lg p-2"/>
                         </div>
-                    <div className="flex justify-center items-center h-12 bg-[#0E64D2] rounded-md"> 
+                    <div className="flex justify-center items-center h-12 bg-[#0E64D2] rounded-md cursor-pointer"> 
                     <button onClick={submitHandler} className="text-xl">Login</button>
                     </div>
                 </form>
                 <div className="mt-4">Don't have an account? <NavLink to='/SignUp' className="text-blue-600">SignUp</NavLink></div>
+                <div className="flex justify-between items-center border-black border-2 border-opacity-60 py-1 px-3 rounded-md mt-4 gap-x-3 w-64 cursor-pointer" >
+                    <FcGoogle className="h-8 w-8"/>
+                    <div><button>LogIn with Google</button></div>
+                    <div>
+                    </div>
+                    </div>
             </div>
             </div>
         </div>

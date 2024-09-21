@@ -1,7 +1,9 @@
 import {data} from '../../data'
 import './style.css'
+import { useNavigate } from 'react-router-dom';
 const EventElement = ()=>{
     const item = data[0];
+    const navigate = useNavigate();
     return (
         <div className='flex justify-center'>
         <div className="flex h-screen w-8/12 pt-20">
@@ -19,7 +21,7 @@ const EventElement = ()=>{
                 <div className='text-2xl'>Venue : <span className='text-[#00FF6A]'>{item.Venue}</span></div>
                 <div className='text-2xl'>Date : <span className='text-[#00FF6A]'>{item.Date}</span></div>
                 <div className='text-2xl'>Price : <span className='text-[#00FF6A]'>{item.Price}</span></div>
-                <button className='bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold text-xl'>BOOK NOW!!</button>
+                <button className='bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold text-xl' onClick={()=>{navigate('/billing')}}>BOOK NOW!!</button>
                 </div>
             </div>
             </div>

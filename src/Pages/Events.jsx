@@ -1,7 +1,6 @@
 import MainSlider from "../Components/MainSlider";
 import {data} from '../../data'
 import UpcomingSlider from "../Components/UpcomingSlider";
-import NavBar from "../Components/NavBar";
 const Events = ()=>{
     return (
         <div className="bg-black w-screen h-screen overflow-x-hidden">
