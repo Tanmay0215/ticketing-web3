@@ -21,10 +21,9 @@ const PayEth = ({tickets, event, account}) => {
     const [owner, setOwner] = useState(user.Name);
     const [accountAddress, setAccountAddress] = useState(account)
 
-    // const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
-    // const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
-    const pinataApiKey = "38db96094599efa01949";
-    const pinataApiSecret = "3f25ca9220af4bcd4deb2870a9be7a5e95550b010aff136c872946f108440c1e";
+    const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
+    const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
+
     console.log(pinataApiKey, pinataApiSecret)
 
     const uploadMetadataToIPFS = async (metadata) => {
@@ -78,7 +77,7 @@ const PayEth = ({tickets, event, account}) => {
           ));
 
           setLoading(false);
-          
+
           } catch (error) {
           console.error('Error in NFT upload:', error);
           setLoading(false);
