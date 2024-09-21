@@ -6,13 +6,12 @@ const HomePageComp = () => {
 
       <div className="text-white flex w-10/12 justify-between px-16">
         <div className="flex gap-y-8 flex-col mt-40">
-          <div className="text-6xl font-jaini">TICKETING</div>
-          <div className="text-6xl font-happyMonkey">FUN is a language in itself</div>
+          <div className="text-6xl font-happyMonkey max-w-md"><i><u>Fun</u></i> is a language in itself</div>
           <p className="text-lg font-poppins max-w-lg">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus imperdiet sed id elementum. Quam vel
             aliquam sit vulputate. Faucibus nec gravida ipsum pulvinar vel.
           </p>
-          <button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-tl-2xl shadow-lg flex justify-center items-center" onClick={()=>{navigate('/Events')}}>
+          <button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-2xl shadow-lg flex justify-center items-center" onClick={()=>{navigate('/Events')}}>
             Browse Events
           </button>
         </div>

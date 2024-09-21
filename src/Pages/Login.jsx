@@ -37,7 +37,7 @@ const Login =()=>{
         })
         .catch((error) => {
             console.error("Error Logging in with Google", error);
-            toast.error('LogIn UnSuccessfull')
+            toast.error('LogIn Unsuccessfull')
           });
       };
     return(
@@ -47,7 +47,7 @@ const Login =()=>{
             </div>
             <div className="w-1/2">
             <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold">Hi , Welcome Back!</div>
+                <div className="text-3xl font-bold font-poppins">Hi, Welcome Back! 👋</div>
                 <form className="w-60 flex flex-col gap-y-10 mt-10">
                     <div className="flex flex-col">
                     <label htmlFor="email" className="text-xl">Email</label>
