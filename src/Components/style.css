@@ -1,0 +1,7 @@
+.slick-active .active-one{
+    background-color: #38884A;
+}
+
+.leftpic {
+    mask-image: linear-gradient(to right, rgba(210, 210, 210, 0.8), rgba(255, 255, 255, 0));
+}
