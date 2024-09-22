@@ -62,7 +62,7 @@ const Payment = () => {
         );
     } else {
         return (
-            <div className="flex flex-col justify-center w-screen h-screen gap-y-20">
+            <div className="flex flex-col justify-center w-screen h-screen gap-y-20 overflow-hidden">
                 <div className="text-5xl text-[#00CC30] text-center font-semibold">Payment Success!!</div>
                 <div className="flex w-screen justify-center items-center gap-32">
                     <div className="rounded-md flex p-10 justify-between bg-white flex-col w-6/12 gap-y-2 shadow-lg shadow-black">

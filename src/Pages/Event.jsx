@@ -46,7 +46,7 @@ const Event = () => {
         );
     }
     return (
-        <div className="bg-black h-screen w-screen">
+        <div className="bg-black w-screen h-screen overflow-hidden">
             <EventElement item={item} />
         </div>
     );
