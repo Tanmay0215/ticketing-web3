@@ -2,10 +2,10 @@ import './style.css'
 import { NavLink} from 'react-router-dom';
 const EventElement = ({item})=>{
     return (
-        <div className='flex justify-center'>
-        <div className="flex h-screen w-8/12 pt-20">
+        <div className='flex justify-center items-center'>
+        <div className="flex h-screen w-8/12 lg:pt-20 md:pt-12 sm:pt-8">
             <div className='w-1/2 relative'>
-                <img src = {item.Image} alt = "Error" className="leftpic h-6/12 aspect-2/3"></img>
+                <img src = {item.Image} alt = "Error" className="leftpic h-7/12 aspect-2/3"></img>
             </div>
             <div className="flex flex-col gap-y-8 absolute right-64 top-[18%] w-5/12 justify-between h-4/6">
             <div>
@@ -18,7 +18,9 @@ const EventElement = ({item})=>{
                 <div className='text-2xl'>Venue : <span className='text-[#00FF6A]'>{item.Venue}</span></div>
                 <div className='text-2xl'>Date : <span className='text-[#00FF6A]'>{item.Date}</span></div>
                 <div className='text-2xl'>Price : <span className='text-[#00FF6A]'>{item.Price}</span></div>
-                <button className='bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold text-xl'><NavLink to = {`/Billing/${item.id}`}>BOOK NOW!!</NavLink></button>
+                <button className='bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold text-xl hover:scale-105 transition-all'><NavLink to = {`/Billing/${item.id}`}>BOOK NOW!!</NavLink></button>
+                <button className='bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black text-xl'><NavLink to = {`/Events`}>Go Back</NavLink></button>
+
                 </div>
             </div>
             </div>

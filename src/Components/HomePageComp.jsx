@@ -7,8 +7,7 @@ const HomePageComp = () => {
         <div className="flex gap-y-8 flex-col mt-40">
           <div className="text-6xl font-happyMonkey max-w-md"><i><u>Fun</u></i> is a language in itself</div>
           <p className="text-lg font-poppins max-w-lg">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus imperdiet sed id elementum. Quam vel
-            aliquam sit vulputate. Faucibus nec gravida ipsum pulvinar vel.
+          Welcome to Ticketing, your ultimate destination for concert tickets! Explore an exciting lineup of upcoming music events, featuring top artists and unforgettable performances across genres..
           </p>
           <NavLink to = '/Events'><button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-2xl shadow-lg flex justify-center items-center">
             Browse Events
