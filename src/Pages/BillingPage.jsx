@@ -64,6 +64,7 @@ const BillingPage = () => {
                 ...doc.data(),
               }));
               setitem(eventsData[id-1]);
+              console.log(item)
             } catch (error) {
               console.error('Error fetching events:', error);
             }

@@ -9,11 +9,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 1000, 
-  },
-  base: '/', 
-  build: {
     outDir: 'dist',
   },
+  base: '/', 
   server: {
     proxy: {
       '/__': {
