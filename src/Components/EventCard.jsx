@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import './style.css'
 const EventCard = ({item})=> {
     return (
-        <div className='ml-10 mt-10 mb-10'>
+        <div className='flex justify-center items-center'>
             <div class="relative overflow-hidden w-64">
                 <img src={item.Image} alt="Your Image" className='w-full aspect-2/3'/>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/100 blur"></div>
