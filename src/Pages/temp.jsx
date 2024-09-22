@@ -637,7 +637,7 @@ function Temp({ event, tickets }) {
   return (
     <button
       className="py-1 px-4 rounded-lg bg-green-500 text-[24px] text-black font-semibold justify-self-end"
-      onClick={() => buyTicket(event.id, event.Price)}
+      onClick={() => buyTicket(event.id, event.Price * tickets)}
     >
       Buy Ticket
     </button>
