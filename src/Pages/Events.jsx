@@ -11,7 +11,7 @@ const Events = ()=>{
         setLoading(true)
         const fetchEvents = async () => {
             try {
-              const eventsCollection = collection(db, 'EventsInfo'); // Replace 'EventsInfo' with your actual collection name
+              const eventsCollection = collection(db, 'EventsInfo'); 
               const querySnapshot = await getDocs(eventsCollection);
               const eventsData = querySnapshot.docs.map((doc) => ({
                 id: doc.id,
@@ -29,7 +29,7 @@ const Events = ()=>{
           };
           fetchEvents();
         }, []);
-      
+        
         if(loading){
             return (
                 <div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>
@@ -51,3 +51,4 @@ const Events = ()=>{
 }
 
 export default Events;
+
