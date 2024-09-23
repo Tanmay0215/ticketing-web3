@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EventTicketNFTABI } from "../../data";
 import Web3 from "web3";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../Context/AppContext";
 
 const contractAddress = "0x494B0e287f24a1D3E0f89a5823D420705B9A5f84";
 
 function Temp({ event, tickets, userName, accountAddress }) {
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
-  const [ipfsUrl, setIpfsUrl] = useState([]);
+  const {ipfsArray, setIpfsArray} = useContext(AppContext)
+  const navigate = useNavigate();
 
 
   //pinata key and secret
@@ -52,7 +55,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
 
   //metadata creation and deployement to IPFS
   const deployToIpfs = async() => {
-    setIpfsUrl([])
+    setIpfsArray([])
     const IpfsUrlArray = []
 
     for(let i=0; i<tickets; i++){
@@ -83,7 +86,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
         console.log(`error while uploading to IPFS ${error}`);
         throw error;
       }
-      IpfsUrlArray.length !== 0 ? setIpfsUrl(IpfsUrlArray) : setIpfsUrl("no Ipfs Url")
+      IpfsUrlArray.length !== 0 ? setIpfsArray(IpfsUrlArray) : setIpfsArray("no Ipfs Url")
 
     }
 
@@ -117,14 +120,28 @@ function Temp({ event, tickets, userName, accountAddress }) {
         value: Web3.utils.toWei(price, "ether"),
       });
       console.log("Ticket purchased:", tx);
+      if(tx){
+        return true;
+      }else{
+        return false;
+      }
     } catch (error) {
       console.error("Error buying ticket:", error);
     }
   };
 
+  const navigateToPaymentPage = (successfullTransaction) => {
+    if(successfullTransaction){
+      navigate(`/Payment/${event.id}${1}`)
+    }else{
+      navigate(`/Payment/${event.id}${1}`)
+    }
+  }
+
   const buyTicketHandeler = async(eventId, price) => {
     await deployToIpfs()
-    await buyTicket(eventId, price);
+    const successfullTransaction = await buyTicket(eventId, price);
+    navigateToPaymentPage(successfullTransaction);
   }
 
   return (
