@@ -26,7 +26,6 @@ const BillingPage = () => {
           try {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             setAccount(accounts[0]);
-            console.log('Connected account:', accounts[0]);
           } catch (error) {
             console.error('Error connecting to MetaMask:', error);
           }
@@ -87,6 +86,7 @@ const BillingPage = () => {
           return () => unsubscribe();
         }, [id]);
 
+
         if(loading){
             return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>)
         }
@@ -125,7 +125,7 @@ const BillingPage = () => {
                             <span>Total</span>
                             <div>{(item.Price * tickets).toFixed(2)} ETH</div>
                         </div>
-                        {account ? (<Temp tickets={tickets} event={item} account={account}/>) : (<Temp tickets={tickets} event={item} />)}
+                        {account ? (<Temp accountAddress={account} userName={user1.displayName} tickets={tickets} event={item}/>) : (<Temp tickets={tickets} event={item} />)}
                 </div>
             </div>
         </div>

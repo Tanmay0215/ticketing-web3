@@ -1,18 +1,20 @@
 import BillingEventCard from "../Components/BillingEventCard";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import Taylor from '../assets/Taylor.jpg';
 import 'flowbite';
+import { AppContext } from "../Context/AppContext";
+import { NavLink } from "react-router-dom";
 
 const Payment = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [item, setItem] = useState({});
     const [loading, setLoading] = useState(true);
-
+    const {ipfsArray} = useContext(AppContext);
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -23,7 +25,7 @@ const Payment = () => {
                     ...doc.data(),
                 }));
                 
-                const eventIndex = parseInt(id) - 1;
+                const eventIndex = parseInt(id[0]) - 1;
                 if (eventIndex >= 0 && eventIndex < eventsData.length) {
                     setItem(eventsData[eventIndex]);
                 } else {
@@ -38,6 +40,13 @@ const Payment = () => {
 
         fetchEvents();
     }, [id]); 
+
+    // const redirectToUrl = (url) => {
+    //     navigate(`${url}`)
+    // }
+    const redirectToUrl = () => {
+        console.log('daf')
+    }
 
     if (loading) {
         return (
@@ -63,9 +72,11 @@ const Payment = () => {
     } else {
         return (
             <div className="flex flex-col justify-center w-screen h-screen gap-y-20 overflow-hidden">
-                <div className="text-5xl text-[#00CC30] text-center font-semibold">Payment Success!!</div>
+                {parseInt(id.toString()[1]) === 0? (<div className="text-5xl text-[#cc0000] text-center font-semibold">Payment UnSuccess!!</div>) 
+                : (<div className="text-5xl text-[#00CC30] text-center font-semibold">Payment Success!!</div>)}
+                <div className="flex flex-col justify-center items-center gap-y-10">
                 <div className="flex w-screen justify-center items-center gap-32">
-                    <div className="rounded-md flex p-10 justify-between bg-white flex-col w-6/12 gap-y-2 shadow-lg shadow-black">
+                    <div className="rounded-md flex p-10 justify-between bg-white min-h-[400px] flex-col w-6/12 gap-y-2 shadow-lg shadow-black">
                         <h3 className="text-[36px] font-bold ">Event-Details</h3>
                         <div className="flex flex-col gap-y-2 my-3 overflow-hidden justify-center items-center">
                             <BillingEventCard event={item} />
@@ -76,9 +87,23 @@ const Payment = () => {
                             Browse Events
                         </button>
                     </div>
-                    <div>
-                        <img src={Taylor} alt="Error loading image" />
+                    <div className="flex flex-col rounded-md shadow-black h-full shadow-lg p-4 px-7 gap-y-3 justify-around items-center">
+                        <div className="text-3xl font-bold">NFT preview</div>
+                        <img className="w-[300px] shadow-lg shadow-black h-[300px] rounded-full" src={item.NFTimg} alt="Error loading image" />
                     </div>
+                </div>
+                    {
+                        ipfsArray.length !== 0 ? (
+                            <div className="flex flex-col gap-y-4">
+                                {
+                                    ipfsArray.map((url, index) => (
+                                        <NavLink to = {url}><button key={index} className="bg-green-500 text-black font-semibold text-2xl px-4 py-2 rounded-md">view Nft metadata {index+1}</button></NavLink>
+                                    ))
+                                }
+                            </div>
+                        ) 
+                        : (<></>)
+                    }
                 </div>
             </div>
         );
