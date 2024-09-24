@@ -14,7 +14,7 @@ const Payment = () => {
     const navigate = useNavigate();
     const [item, setItem] = useState({});
     const [loading, setLoading] = useState(true);
-    const {ipfsArray} = useContext(AppContext);
+    const {ipfsArray, setIpfsArray} = useContext(AppContext);
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -46,6 +46,10 @@ const Payment = () => {
     // }
     const redirectToUrl = () => {
         console.log('daf')
+    }
+
+    if(parseInt(id.toString()[1]) === 0){
+        setIpfsArray([])
     }
 
     if (loading) {
