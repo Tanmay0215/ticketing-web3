@@ -97,7 +97,7 @@ const Payment = () => {
                             <div className="flex flex-col gap-y-4">
                                 {
                                     ipfsArray.map((url, index) => (
-                                        <NavLink to = {url}><button key={index} className="bg-green-500 text-black font-semibold text-2xl px-4 py-2 rounded-md">view Nft metadata {index+1}</button></NavLink>
+                                        <NavLink key={index} to = {url}><button className="bg-green-500 text-black font-semibold text-2xl px-4 py-2 rounded-md">view Nft metadata {index+1}</button></NavLink>
                                     ))
                                 }
                             </div>
