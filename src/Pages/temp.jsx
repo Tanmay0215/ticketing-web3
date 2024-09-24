@@ -55,6 +55,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
 
   //metadata creation and deployement to IPFS
   const deployToIpfs = async() => {
+    
     setIpfsArray([])
     const IpfsUrlArray = []
 
@@ -71,15 +72,15 @@ function Temp({ event, tickets, userName, accountAddress }) {
       }
       try {
         
-        event.TotaleTickets--; //this here should be a db call to decrease the total ticket count permanently
+        event.TotalTickets--; //this here should be a db call to decrease the total ticket count permanently
   
         const metadataIpfsHash = await uploadMetadataToIPFS(metadata);
-        console.log('Metadata uploaded to IPFS ticket ',i," :", `https://ipfs.io/ipfs/${metadataIpfsHash}`);
+        console.log('Metadata uploaded to IPFS ticket ',i," :", `https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`);
   
   
         // https://ipfs.io/ipfs/QmQw7DovEvcdmkZZQgp9sAvBAb9HC9iGRoFmSJu1L9Bq3A  -> dummy URI
 
-        IpfsUrlArray.push(`https://ipfs.io/ipfs/${metadataIpfsHash}`)
+        IpfsUrlArray.push(`https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`)
   
         
       } catch (error) {
@@ -134,13 +135,22 @@ function Temp({ event, tickets, userName, accountAddress }) {
     if(successfullTransaction){
       navigate(`/Payment/${event.id}${1}`)
     }else{
-      navigate(`/Payment/${event.id}${1}`)
+      navigate(`/Payment/${event.id}${0}`)
     }
   }
 
   const buyTicketHandeler = async(eventId, price) => {
-    await deployToIpfs()
+    if(!accountAddress){
+      alert('no wallet detected, connect to a wallet using the Connect Wallet button');
+      return
+    }
     const successfullTransaction = await buyTicket(eventId, price);
+    if(successfullTransaction){
+      await deployToIpfs()
+    }else{
+      await deployToIpfs()
+      // console.log('transaction denied')
+    }
     navigateToPaymentPage(successfullTransaction);
   }
 
