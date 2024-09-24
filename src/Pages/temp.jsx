@@ -1,11 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { EventTicketNFTABI } from "../../data";
+import { newEventTicketNFTAbi } from "../../data";
 import Web3 from "web3";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 
-const contractAddress = "0x494B0e287f24a1D3E0f89a5823D420705B9A5f84";
+// const contractAddress = "0x494B0e287f24a1D3E0f89a5823D420705B9A5f84";
+const newContractAddress = "0xB9e2A2008d3A58adD8CC1cE9c15BF6D4bB9C6d72";
 
 function Temp({ event, tickets, userName, accountAddress }) {
   const [web3, setWeb3] = useState(null);
@@ -35,8 +37,8 @@ function Temp({ event, tickets, userName, accountAddress }) {
 
           // Initialize the contract
           const newContract = new newWeb3.eth.Contract(
-            EventTicketNFTABI,
-            contractAddress
+            newEventTicketNFTAbi,
+            newContractAddress
           );
           setContract(newContract);
 
@@ -99,6 +101,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
     try {
       const response = await axios.post(url, metadata, {
         headers: {
+          'Content-Type': 'application/json',
           'pinata_api_key': pinataApiKey,
           'pinata_secret_api_key': pinataApiSecret,
         },
@@ -114,9 +117,9 @@ function Temp({ event, tickets, userName, accountAddress }) {
   };
 
   // Function to buy a ticket
-  const buyTicket = async (eventId, price) => {
+  const buyTicket = async (eventId, price, array) => {
     try {
-      const tx = await contract.methods.buyTicket(eventId).send({
+      const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
         from: accountAddress,
         value: Web3.utils.toWei(price, "ether"),
       });
@@ -144,20 +147,21 @@ function Temp({ event, tickets, userName, accountAddress }) {
       alert('no wallet detected, connect to a wallet using the Connect Wallet button');
       return
     }
-    const successfullTransaction = await buyTicket(eventId, price);
-    if(successfullTransaction){
-      await deployToIpfs()
-    }else{
-      await deployToIpfs()
-      // console.log('transaction denied')
-    }
+    await deployToIpfs()
+    const successfullTransaction = await buyTicket(eventId, price, ipfsArray);
+    // if(successfullTransaction){
+    //   await deployToIpfs()
+    // }else{
+    //   await deployToIpfs()
+    //   // console.log('transaction denied')
+    // }
     navigateToPaymentPage(successfullTransaction);
   }
 
   return (
     <button
       className="py-1 px-4 rounded-lg bg-green-500 text-[24px] text-black font-semibold justify-self-end"
-      onClick={() => buyTicketHandeler(event.id, event.Price * tickets)}
+      onClick={() => buyTicketHandeler(event.id, 0.02 * tickets)}
     >
       Buy Ticket
     </button>
