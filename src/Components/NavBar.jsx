@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-
+import RewardCoins from "./RewardCoins";
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,7 +27,7 @@ const NavBar = () => {
         Ticketing
       </div>
       <div>
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
           <div>
             <button className="px-4"
               onClick={() => {
@@ -45,7 +45,7 @@ const NavBar = () => {
             </button>
           </div>
         ) : (
-          <></>
+          <RewardCoins /> 
         )}
       </div>
     </div>

@@ -1,15 +1,18 @@
-import Taylor from '../assets/Taylor.jpg'
+import Taylor from '../assets/Taylor.jpg';
 import { NavLink} from 'react-router-dom';
+import ReactTypingEffect from 'react-typing-effect';
+
 const HomePageComp = () => {
   return (<div className=" flex items-center min-h-screen w-screen">
 
       <div className="text-white flex w-10/12 justify-between px-16">
         <div className="flex gap-y-8 flex-col mt-40">
-          <div className="text-6xl font-happyMonkey max-w-md"><i><u>Fun</u></i> is a language in itself</div>
-          <p className="text-lg font-poppins max-w-lg">
+          <div className="text-6xl font-happyMonkey max-w-md"><ReactTypingEffect text={["Did you know","FUN is a language in itself"]} speed={75} eraseSpeed={50} cursor={'!'}/></div>
+          <p className="text-xl font-poppins max-w-lg">
           Welcome to Ticketing, your ultimate destination for concert tickets! Explore an exciting lineup of upcoming music events, featuring top artists and unforgettable performances across genres..
           </p>
-          <NavLink to = '/Events'><button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-roboto rounded-2xl shadow-lg flex justify-center items-center">
+          <NavLink to = '/Events'>
+          <button className="w-[320px] h-[69px] bg-gray-800 text-white text-2xl font-happyMonkey rounded-2xl shadow-lg flex justify-center items-center hover:scale-105 hover:bg-gray-700 transition duration-300 ease-in-out">
             Browse Events
           </button>
           </NavLink>

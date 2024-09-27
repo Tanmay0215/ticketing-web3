@@ -125,7 +125,7 @@ const BillingPage = () => {
                             <span>Total</span>
                             <div>{(item.Price * tickets).toFixed(2)} ETH</div>
                         </div>
-                        {account ? (<Temp accountAddress={account} userName={user1.displayName} tickets={tickets} event={item}/>) : (<Temp tickets={tickets} event={item} />)}
+                          {account ? (<Temp accountAddress={account} userName={user1.displayName} tickets={tickets} event={item}/>) : (<Temp tickets={tickets} event={item} />)}
                 </div>
             </div>
         </div>
