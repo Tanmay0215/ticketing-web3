@@ -7,7 +7,7 @@ const HomePageComp = () => {
 
       <div className="text-white flex w-10/12 justify-between px-16">
         <div className="flex gap-y-8 flex-col mt-40">
-          <div className="text-6xl font-happyMonkey max-w-md"><ReactTypingEffect text={["Did you know","FUN is a language in itself"]} speed={75} eraseSpeed={50} cursor={'!'}/></div>
+          <div className="text-6xl font-happyMonkey max-w-md"><ReactTypingEffect text={["Did you know?","FUN is a language in itself"]} speed={75} eraseSpeed={50} cursor={'_'}/></div>
           <p className="text-xl font-poppins max-w-lg">
           Welcome to Ticketing, your ultimate destination for concert tickets! Explore an exciting lineup of upcoming music events, featuring top artists and unforgettable performances across genres..
           </p>
