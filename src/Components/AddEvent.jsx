@@ -20,7 +20,6 @@ const AddEvent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Event Data: ", eventData);
-    // Handle form submission logic here (e.g., sending data to a backend)
   };
 
   return (

@@ -14,6 +14,7 @@ const NavBar = () => {
       if (user) {
         setIsLoggedIn(true);
       } else {
+        console.log("no user found")
         setIsLoggedIn(false);
       }
     });

@@ -1,22 +1,22 @@
-import { useContext, useEffect, useState } from "react";
-import { EventTicketNFTABI } from "../../data";
-import { newEventTicketNFTAbi } from "../../data";
+import { Children, useContext, useEffect, useState } from "react";
+// import { EventTicketNFTABI } from "../../data";
+import { neoXNFTAbi } from "../../data";
 import Web3 from "web3";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
-
-// const contractAddress = "0x494B0e287f24a1D3E0f89a5823D420705B9A5f84";
-const newContractAddress = "0xB9e2A2008d3A58adD8CC1cE9c15BF6D4bB9C6d72";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore"; 
+import { db , auth } from "../firebase";
+const newContractAddress = "0xF1dA7f0d23d75dc63706a4C918eE34A123235720";
 
 function Temp({ event, tickets, userName, accountAddress }) {
   const [web3, setWeb3] = useState(null);
   const [contract, setContract] = useState(null);
   const {ipfsArray, setIpfsArray} = useContext(AppContext)
   const navigate = useNavigate();
+  const IpfsUrlArray = [];
 
 
-  //pinata key and secret
   const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
   const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
 
@@ -25,25 +25,17 @@ function Temp({ event, tickets, userName, accountAddress }) {
     const init = async () => {
       if (window.ethereum) {
         try {
-          // Request account access
-          // await window.ethereum.request({ method: "eth_requestAccounts" });
 
-          // Initialize Web3
           const newWeb3 = new Web3(window.ethereum);
           setWeb3(newWeb3);
 
-          // Get the connected accounts
-          // const accounts = await newWeb3.eth.getAccounts();
-
-          // Initialize the contract
           const newContract = new newWeb3.eth.Contract(
-            newEventTicketNFTAbi,
+            neoXNFTAbi,
             newContractAddress
           );
           setContract(newContract);
 
-          // Load events
-          //   await loadEvents(newContract);
+
         } catch (error) {
           console.error("User denied account access or other error:", error);
         }
@@ -54,12 +46,9 @@ function Temp({ event, tickets, userName, accountAddress }) {
 
     init();
   }, []);
-
-  //metadata creation and deployement to IPFS
   const deployToIpfs = async() => {
     
     setIpfsArray([])
-    const IpfsUrlArray = []
 
     for(let i=0; i<tickets; i++){
       const metadata = {
@@ -74,16 +63,11 @@ function Temp({ event, tickets, userName, accountAddress }) {
       }
       try {
         
-        event.TotalTickets--; //this here should be a db call to decrease the total ticket count permanently
+        event.TotalTickets--; 
   
         const metadataIpfsHash = await uploadMetadataToIPFS(metadata);
         console.log('Metadata uploaded to IPFS ticket ',i," :", `https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`);
-  
-  
-        // https://ipfs.io/ipfs/QmQw7DovEvcdmkZZQgp9sAvBAb9HC9iGRoFmSJu1L9Bq3A  -> dummy URI
-
         IpfsUrlArray.push(`https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`)
-  
         
       } catch (error) {
         console.log(`error while uploading to IPFS ${error}`);
@@ -116,7 +100,6 @@ function Temp({ event, tickets, userName, accountAddress }) {
     }
   };
 
-  // Function to buy a ticket
   const buyTicket = async (eventId, price, array) => {
     try {
       const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
@@ -142,20 +125,72 @@ function Temp({ event, tickets, userName, accountAddress }) {
     }
   }
 
+  async function updateUserNftAndRewardToken(successfullTransaction) {
+    try {
+      const user = auth.currentUser;
+      console.log(user);
+      if (!user) {
+        console.error('No user is currently logged in');
+        navigate('/login');
+        return;
+      }
+  
+      const userId = user.uid;
+      console.log(userId);
+      const userDocRef = doc(db, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+      console.log(userDoc);
+      
+      if (!userDoc.exists()) {
+        console.error('No such user document!');
+        return;
+      }
+  
+      const currentNftArray = userDoc.data().nft || [];
+      const currentRewardTokens = userDoc.data().rewardTokens || 0;
+  
+      let updatedNftArray = [...currentNftArray]; 
+  
+      for (let i = 0; i < IpfsUrlArray.length; i++) {
+        const newNftData = {
+          ipfsUrl: IpfsUrlArray[i],
+          eventId: event.id,
+          address: accountAddress
+        };
+        console.log(newNftData);
+        console.log(event.Price);
+
+        updatedNftArray.push(newNftData);
+      }
+
+      await updateDoc(userDocRef, {
+        nft: updatedNftArray,
+        rewardTokens: currentRewardTokens + IpfsUrlArray.length * event.Price * 1000, 
+      });
+  
+      console.log('User details updated successfully');
+    } catch (error) {
+      console.error('Error updating user details:', error);
+    } finally {
+      navigateToPaymentPage(successfullTransaction);
+    }
+  }
+  
   const buyTicketHandeler = async(eventId, price) => {
     if(!accountAddress){
       alert('no wallet detected, connect to a wallet using the Connect Wallet button');
       return
     }
     await deployToIpfs()
-    const successfullTransaction = await buyTicket(eventId, price, ipfsArray);
-    // if(successfullTransaction){
-    //   await deployToIpfs()
-    // }else{
-    //   await deployToIpfs()
-    //   // console.log('transaction denied')
-    // }
-    navigateToPaymentPage(successfullTransaction);
+    // const successfullTransaction = await buyTicket(eventId, price, ipfsArray);
+    const successfullTransaction = true;
+    if(successfullTransaction){
+      console.log(IpfsUrlArray)
+      return updateUserNftAndRewardToken(successfullTransaction);
+    }
+    else{
+      return navigateToPaymentPage(successfullTransaction)
+    }
   }
 
   return (

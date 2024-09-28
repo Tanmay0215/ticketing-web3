@@ -3,16 +3,14 @@ import ChatToggleButton from './ChatToggleButton';
 import ChatBox from './ChatBox';
 
 const Chat = () => {
-  const [isOpen, setIsOpen] = useState(false); // State to control chatbox visibility
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Function to toggle chatbox visibility
   const toggleChatBox = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <div className="flex flex-col items-center">
-      {/* Chat toggle button */}
       <div>
         <ChatBox isOpen={isOpen} />
       </div>
@@ -21,7 +19,6 @@ const Chat = () => {
         <ChatToggleButton isOpen={isOpen} toggleChatBox={toggleChatBox} />
       </div>
 
-      {/* Chatbox */}
     </div>
   );
 };

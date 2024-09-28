@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BillingEventCard from "../Components/BillingEventCard";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams , useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
@@ -9,117 +9,95 @@ import Loader from "../Components/Loader";
 import Temp from "./temp";
 
 const BillingPage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const [item, setitem] = useState({});
-  const [account, setAccount] = useState(null);
-  const [user1, setUser1] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [rates, setRates] = useState({});
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
-  const [convertedValue, setConvertedValue] = useState(null);
-
-  const topCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'INR', 'RUB', 'SGD', 'BRL', 'ZAR', 'HKD', 'KRW'];
-  const [tickets, setTickets] = useState(() => {
-    const savedTickets = localStorage.getItem('tickets');
-    return savedTickets ? parseInt(savedTickets) : 1;
-  });
-  const [loading, setLoading] = useState(true)
-
-  const connectWallet = async () => {
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        setAccount(accounts[0]);
-      } catch (error) {
-        console.error('Error connecting to MetaMask:', error);
-      }
-    } else {
-      alert('MetaMask not found. Please install MetaMask!');
-    }
-  };
-
-  const decreaseCount = () => {
-    if (tickets > 1) {
-      setTickets((prev) => {
-        const updatedTickets = prev - 1;
-        localStorage.setItem('tickets', updatedTickets);
-        return updatedTickets;
-      });
-    }
-  }
-
-  const increaseCount = () => {
-    if (tickets < 6) {
-      setTickets((prev) => {
-        const updatedTickets = prev + 1;
-        localStorage.setItem('tickets', updatedTickets);
-        return updatedTickets;
-      });
-    }
-  }
-  useEffect(() => {
-    setLoading(true)
-    const fetchEvents = async () => {
-      try {
-        const eventsCollection = collection(db, 'EventsInfo');
-        const querySnapshot = await getDocs(eventsCollection);
-        const eventsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setitem(eventsData[id - 1]);
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-      finally {
-        setLoading(false)
-      }
-    };
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user);
-      console.log(user.photoURL)
-      setUser1(user);
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
+    const navigate = useNavigate();
+    const {id} = useParams();
+    const [item,setitem] = useState({});
+    const [account, setAccount] = useState(null);
+    const [user1,setUser1] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [tickets, setTickets] = useState(() => {
+        const savedTickets = localStorage.getItem('tickets');
+        return savedTickets ? parseInt(savedTickets) : 1;
     });
-    fetchEvents();
-    return () => unsubscribe();
-  }, [id]);
+    const [loading,setLoading] = useState(true)
 
-  useEffect(() => {
-    fetch("https://api.coinbase.com/v2/exchange-rates?currency=ETH")
-      .then((response) => response.json())
-      .then((data) => {
-        setRates(data.data.rates);
-      })
-      .catch((error) => console.error("Error fetching exchange rates:", error));
-  }, []);
+    const connectWallet = async () => {
+        if (window.ethereum) {
+          try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            setAccount(accounts[0]);
+          } catch (error) {
+            console.error('Error connecting to MetaMask:', error);
+          }
+        } else {
+          alert('MetaMask not found. Please install MetaMask!');
+        }
+      };
 
-  useEffect(() => {
-    if (selectedCurrency && rates[selectedCurrency]) {
-      const value = (0.02*rates[selectedCurrency]).toFixed(2);
-      setConvertedValue(value);
+      const decreaseCount = () => {
+        if(tickets > 1){
+            setTickets((prev) => {
+                const updatedTickets = prev - 1;
+                localStorage.setItem('tickets', updatedTickets); 
+                return updatedTickets;
+            });
+        }
     }
-  }, [selectedCurrency, rates]);
 
-  const handleCurrencyChange = (e) => {
-    setSelectedCurrency(e.target.value);
-  };
+    const increaseCount = () => {
+        if(tickets < 6){
+            setTickets((prev) => {
+                const updatedTickets = prev + 1;
+                localStorage.setItem('tickets', updatedTickets); 
+                return updatedTickets;
+            });
+        }
+    }
+    useEffect(() => {
+        setLoading(true)
+        const fetchEvents = async () => {
+            try {
+              const eventsCollection = collection(db, 'EventsInfo'); 
+              const querySnapshot = await getDocs(eventsCollection);
+              const eventsData = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              setitem(eventsData[id-1]);
+            } catch (error) {
+              console.error('Error fetching events:', error);
+            }
+            finally{
+                setLoading(false)
+            }
+          };
+          const auth = getAuth();
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+            console.log(user);
+  
+            if (user) {
+                setUser1(user)
+                setIsLoggedIn(true);
+            } else {
+                navigate('/login')
+                console.log("no user found")
+                setIsLoggedIn(false);
+            }
+            });
+            fetchEvents();
+            return () => unsubscribe();
+        }, [id]);
 
-  if (loading) {
-    return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader /></div>)
-  }
-  else {
-    return (
-      <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
+
+        if(loading){
+            return (<div className="w-screen h-screen bg-black flex justify-center items-center"><Loader/></div>)
+        }
+        else {
+            return(
+            <div className="overflow-hidden flex-col gap-y-4 bg-Siuu w-screen min-h-screen flex items-center ">
         <div className="w-10/12 h-[70px] mt-[44px] flex justify-end items-center gap-x-3">
-          <button className="px-4 py-2 text-[24px] max-h-[50px] border border-black rounded-md" onClick={connectWallet}>{account ? (<div>{account.slice(0, 4) + '...' + account.slice(-4)}</div>) : (<div>Connect Wallet</div>)}</button>
-          {user1 ? (<img src={user1.photoURL} className="w-[50px] h-[50px] rounded-full" />) : (<div className="bg-purple-600 w-[50px] h-[50px] rounded-full"></div>)}
+        <button className="px-4 py-2 text-[24px] max-h-[50px] border border-black rounded-md" onClick={connectWallet}>{account ? (<div>{account.slice(0,4) + '...' + account.slice(-4)}</div>):(<div>Connect Wallet</div>)}</button>
+        {user1? (<img src={user1.photoURL} className="w-[50px] h-[50px] rounded-full"/>) : (<div className="bg-purple-600 w-[50px] h-[50px] rounded-full"></div>)}
         </div>
         <div className="w-10/12 mt-[20px] flex gap-x-3 flex-col justify-center gap-y-6">
             <h3 className="uppercase text-[54px] w-full flex items-center font-bold">Billing</h3>
@@ -154,11 +132,11 @@ const BillingPage = () => {
             </div>
         </div>
         <div className="flex mt-[38px] justify-center w-10/12">
-          <h1 className="uppercase font-bold text-[48px]">Get yourself a NFT, Buy ticket now !!</h1>
+            <h1 className="uppercase font-bold text-[48px]">Get yourself a NFT, Buy ticket now !!</h1>
         </div>
-      </div>
-    )
-  }
+    </div>
+            )
+        }
 }
-
+ 
 export default BillingPage;
