@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
-
+import RewardCoins from "./RewardCoins";
 
 const NavBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,20 +23,20 @@ const NavBar = () => {
   const navigate = useNavigate();
   return (
     <div className="flex w-full justify-between py-3">
-      <div className="uppercase font-jaini text-5xl" onClick={navigate("/")}>
+      <div className="uppercase font-jaini text-5xl">
         Ticketing
       </div>
       <div>
         {!isLoggedIn ? (
           <div>
-            <button className="px-4"
+            <button className="px-4 py-2"
               onClick={() => {
                 navigate("/signup");
               }}
             >
               SignUp
             </button>
-            <button className="px-4 py-2 border-2 rounded-full" 
+            <button className="px-4 py-2 border-2 border-zinc-600 rounded-full hover:bg-gray-800 transition duration-300 ease-in-out" 
               onClick={() => {
                 navigate("/login");
               }}
@@ -45,7 +45,7 @@ const NavBar = () => {
             </button>
           </div>
         ) : (
-          <></>
+          <RewardCoins /> 
         )}
       </div>
     </div>
