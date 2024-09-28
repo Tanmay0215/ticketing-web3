@@ -3,10 +3,13 @@ import { Children, useContext, useEffect, useState } from "react";
 import { neoXNFTAbi } from "../../data";
 import Web3 from "web3";
 import axios from "axios";
+// import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore"; 
 import { db , auth } from "../firebase";
+
+
 const newContractAddress = "0xF1dA7f0d23d75dc63706a4C918eE34A123235720";
 
 function Temp({ event, tickets, userName, accountAddress }) {
@@ -48,6 +51,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
   }, []);
   const deployToIpfs = async() => {
     
+    console.log(contract)
     setIpfsArray([])
 
     for(let i=0; i<tickets; i++){
@@ -101,12 +105,29 @@ function Temp({ event, tickets, userName, accountAddress }) {
   };
 
   const buyTicket = async (eventId, price, array) => {
+
+    console.log(tickets, price, array, eventId)
+    console.log(typeof tickets,typeof price, typeof array, typeof eventId)
+    console.log(Web3.utils.toWei(price, "ether"));
+
+
     try {
-      const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
+      // Estimate gas for the transaction
+      const estimatedGas = await contract.methods.buyTickets(eventId, tickets, array).estimateGas({
         from: accountAddress,
-        value: Web3.utils.toWei(price, "ether"),
+        value: Web3.utils.toWei(price, "ether")  // Use Web3.js to convert Ether to Wei
+    });
+
+      // Send the transaction with gas and gas limit
+      const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
+          from: accountAddress,
+          value: Web3.utils.toWei(price, "ether"),
+          gas: estimatedGas,          // Use the estimated gas value
+          gasLimit: estimatedGas      // Optionally set a gas limit
       });
+
       console.log("Ticket purchased:", tx);
+
       if(tx){
         return true;
       }else{
@@ -182,8 +203,8 @@ function Temp({ event, tickets, userName, accountAddress }) {
       return
     }
     await deployToIpfs()
-    // const successfullTransaction = await buyTicket(eventId, price, ipfsArray);
-    const successfullTransaction = true;
+    const successfullTransaction = await buyTicket(eventId, price, IpfsUrlArray);
+    // const successfullTransaction = true;
     if(successfullTransaction){
       console.log(IpfsUrlArray)
       return updateUserNftAndRewardToken(successfullTransaction);
@@ -196,7 +217,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
   return (
     <button
       className="py-1 px-4 rounded-lg bg-green-500 text-[24px] text-black font-semibold justify-self-end"
-      onClick={() => buyTicketHandeler(event.id, 0.02 * tickets)}
+      onClick={() => buyTicketHandeler(event.id, event.Price * tickets)}
     >
       Buy Ticket
     </button>
