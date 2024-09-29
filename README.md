@@ -16,6 +16,8 @@ Every ticket is issued as a **unique NFT**, ensuring authenticity, traceability,
 
 A **decentralized AI chatbot** to assist users with any queries or concerns in real-time. The chatbot is powered by AI and operates on a decentralized network, ensuring **privacy** and **autonomy**. The chatbot is available 24/7 to guide you through the process.
 
+![](./gif.gif)
+
 ## Getting Started
 
 ### Installation & Setup
