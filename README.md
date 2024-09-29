@@ -49,18 +49,15 @@ A **decentralized AI chatbot** to assist users with any queries or concerns in r
    npm install
    ```
 
-4. **Start the development server:**
+4. **`.env` File:**
+   Edit the `sample.env` to `.env` file in the root directory of the project.
+   Add the given environment variables to the `.env` file
+
+5. **Start the development server:**
 
    ```bash
    npm run dev
    ```
-
-5. **`.env` File:**
-   Edit the `sample.env` to `.env` file in the root directory of the project.
-   Add the given environment variables to the `.env` file
-
-6. **Access the platform**:
-   Open [http://localhost:5173](http://localhost:5173) in your browser to interact with the NFT-based ticketing system.
 
 ## Tech Stack
 
