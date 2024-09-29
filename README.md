@@ -2,6 +2,15 @@
 
 Welcome to the **NFT-Based Ticketing Platform**, a revolutionary way to buy, sell, and manage event tickets using blockchain technology. Our platform leverages the power of **NFTs (Non-Fungible Tokens)** to provide secure, verifiable, and unique digital tickets, along with exciting **rewards** for every purchase. We also integrate a **decentralized AI chatbot** to assist users with any questions or concerns, ensuring a seamless ticketing experience.
 
+## Project Vision
+
+The **NFT-Based Ticketing Platform** aims to transform the event ticketing industry by introducing a secure, transparent, and rewarding ticketing system powered by blockchain technology. Our vision is:
+
+1. To provide **hassle-free** and **secure** ticketing
+2. To avoid **counterfeit** tickets and black-market sales
+3. To provide interactive and personalized **User Experience**
+
+
 ## Key Features
 
 ### 1. **NFT-Based Ticketing**
@@ -60,8 +69,20 @@ A **decentralized AI chatbot** to assist users with any queries or concerns in r
 - **Wallet Integration**: MetaMask
 - **Decentralized AI Chatbot**: [Gaianet.ai](https://www.gaianet.ai/) Decentralized AI chatbot powered by machine learning and blockchain
 
+## Special Links
+
+- [Live Deployment](https://ticketing-web3-vgs3.onrender.com/)
+- [Project Presentation](https://www.canva.com/design/DAGPVY0WK9s/N-_08x_GEmeV90c_9jCi0w/edit?utm_content=DAGPVY0WK9s)
+- [Project Demo Video](https://youtu.be/7L5Sb06hoLY)
+
 ## Contributors
 
-- [Ayush Singla](https://github.com/Ayushsingla1)
-- [Tanmay Gupta](https://github.com/Tanmay0215)
-- [Dev Aggarwal](https://github.com/DevAggarwal03)
+- **Dev Aggarwal**
+  - Contact - +91 9025970630
+  - Email - agr.dev1009@gmail.com
+- **Ayush Singla**
+  - Contact - +91 9416855609
+  - Email - ayushsingla1122@gmail.com
+- **Tanmay Gupta**
+  - Contact - +91 6375405568
+  - Email - tanmaygupta.0215@gmail.com
