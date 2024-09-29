@@ -69,7 +69,7 @@ A **decentralized AI chatbot** to assist users with any queries or concerns in r
 ## Special Links
 
 - [Live Deployment](https://ticketing-web3-vgs3.onrender.com/)
-- [Project Presentation](https://www.canva.com/design/DAGPVY0WK9s/N-_08x_GEmeV90c_9jCi0w/edit?utm_content=DAGPVY0WK9s)
+- [Project Presentation](https://docs.google.com/presentation/d/1hxuoIbUcDDBjWdtPJP44c4pOG8dX8dUO/edit?usp=drive_web&ouid=104553686561287705803&rtpof=true)
 - [Project Demo Video](https://youtu.be/7L5Sb06hoLY)
 
 ## Contributors
