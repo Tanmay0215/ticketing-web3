@@ -36,15 +36,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
     const getContractSigner = async () => {
 
         try {
-
-          // const newWeb3 = new Web3(window.ethereum);
-          // setWeb3(newWeb3);
-
-          // const newContract = new newWeb3.eth.Contract(
-          //   neoXNFTAbi,
-          //   newContractAddress
-          // );
-          // setContract(newContract);
+ 
 
           await provider.send('eth_requestAccounts', []);
 
@@ -123,19 +115,6 @@ function Temp({ event, tickets, userName, accountAddress }) {
   const buyTicket = async (eventId, price, array) => {
 
     try {
-      // Estimate gas for the transaction
-    //   const estimatedGas = await contract.methods.buyTickets(eventId, tickets, array).estimateGas({
-    //     from: accountAddress,
-    //     value: Web3.utils.toWei(price, "ether")  // Use Web3.js to convert Ether to Wei
-    // });
-
-    //   // Send the transaction with gas and gas limit
-    //   const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
-    //       from: accountAddress,
-    //       value: Web3.utils.toWei(price, "ether"),
-    //       gas: estimatedGas,          // Use the estimated gas value
-    //       gasLimit: estimatedGas      // Optionally set a gas limit
-    //   });
     
     const tx = await signerContract.buyTickets(eventId, tickets, array,{
       value: ethers.parseEther(price.toString()), // Convert ether to Wei
