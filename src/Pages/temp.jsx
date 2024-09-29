@@ -1,9 +1,11 @@
-import { Children, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // import { EventTicketNFTABI } from "../../data";
-import { neoXNFTAbi } from "../../data";
-import Web3 from "web3";
+// import { neoXNFTAbi } from "../../data";
+// import Web3 from "web3";
 import axios from "axios";
 // import { ethers } from "ethers";
+import { ABI, Address } from "../contract";
+import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore"; 
@@ -13,42 +15,56 @@ import { db , auth } from "../firebase";
 const newContractAddress = "0xF1dA7f0d23d75dc63706a4C918eE34A123235720";
 
 function Temp({ event, tickets, userName, accountAddress }) {
-  const [web3, setWeb3] = useState(null);
-  const [contract, setContract] = useState(null);
+  const [signerContract, setSignerContract] = useState(null);
   const {ipfsArray, setIpfsArray} = useContext(AppContext)
   const navigate = useNavigate();
   const IpfsUrlArray = [];
+  const [isMining, setIsMining] = useState(false);
 
+  const provider = new ethers.BrowserProvider(window.ethereum)
+
+  const contractABI = ABI;
+  const contractAddress = Address;
+
+  const contract = new ethers.Contract(contractAddress, contractABI, provider)
 
   const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
   const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
 
 
   useEffect(() => {
-    const init = async () => {
-      if (window.ethereum) {
+    const getContractSigner = async () => {
+
         try {
 
-          const newWeb3 = new Web3(window.ethereum);
-          setWeb3(newWeb3);
+          // const newWeb3 = new Web3(window.ethereum);
+          // setWeb3(newWeb3);
 
-          const newContract = new newWeb3.eth.Contract(
-            neoXNFTAbi,
-            newContractAddress
-          );
-          setContract(newContract);
+          // const newContract = new newWeb3.eth.Contract(
+          //   neoXNFTAbi,
+          //   newContractAddress
+          // );
+          // setContract(newContract);
+
+          await provider.send('eth_requestAccounts', []);
+
+          const signer = await provider.getSigner();
+
+          const contractWithSigner = contract.connect(signer);
+          setSignerContract(contractWithSigner);
+
+          console.log(signer)
 
 
         } catch (error) {
           console.error("User denied account access or other error:", error);
         }
-      } else {
-        alert("Please install MetaMask!");
-      }
     };
 
-    init();
+    getContractSigner();
   }, []);
+
+
   const deployToIpfs = async() => {
     
     console.log(contract)
@@ -106,25 +122,33 @@ function Temp({ event, tickets, userName, accountAddress }) {
 
   const buyTicket = async (eventId, price, array) => {
 
-    console.log(tickets, price, array, eventId)
-    console.log(typeof tickets,typeof price, typeof array, typeof eventId)
-    console.log(Web3.utils.toWei(price, "ether"));
-
-
     try {
       // Estimate gas for the transaction
-      const estimatedGas = await contract.methods.buyTickets(eventId, tickets, array).estimateGas({
-        from: accountAddress,
-        value: Web3.utils.toWei(price, "ether")  // Use Web3.js to convert Ether to Wei
+    //   const estimatedGas = await contract.methods.buyTickets(eventId, tickets, array).estimateGas({
+    //     from: accountAddress,
+    //     value: Web3.utils.toWei(price, "ether")  // Use Web3.js to convert Ether to Wei
+    // });
+
+    //   // Send the transaction with gas and gas limit
+    //   const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
+    //       from: accountAddress,
+    //       value: Web3.utils.toWei(price, "ether"),
+    //       gas: estimatedGas,          // Use the estimated gas value
+    //       gasLimit: estimatedGas      // Optionally set a gas limit
+    //   });
+    
+    const tx = await signerContract.buyTickets(eventId, tickets, array,{
+      value: ethers.parseEther(price.toString()), // Convert ether to Wei
     });
 
-      // Send the transaction with gas and gas limit
-      const tx = await contract.methods.buyTickets(eventId, tickets, array).send({
-          from: accountAddress,
-          value: Web3.utils.toWei(price, "ether"),
-          gas: estimatedGas,          // Use the estimated gas value
-          gasLimit: estimatedGas      // Optionally set a gas limit
-      });
+    console.log("Transaction sent:", tx);
+
+    // Wait for the transaction to be mined
+    setIsMining(true);
+    const receipt = await tx.wait();
+    setIsMining(false);
+
+    console.log("Transaction mined:", receipt);
 
       console.log("Ticket purchased:", tx);
 
