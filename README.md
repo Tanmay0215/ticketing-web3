@@ -62,7 +62,7 @@ A **decentralized AI chatbot** to assist users with any queries or concerns in r
 ## Tech Stack
 
 - **Frontend**: React, Tailwind CSS
-- **Blockchain**: Solidity (Smart Contracts), Remix IDE (Deployment and Testing), NeoX blockchain
+- **Blockchain**: Solidity (Smart Contracts), Remix IDE (Deployment and Testing), AIA blockchain
 - **Wallet Integration**: MetaMask
 - **Decentralized AI Chatbot**: [Gaianet.ai](https://www.gaianet.ai/) Decentralized AI chatbot powered by machine learning and blockchain
 
