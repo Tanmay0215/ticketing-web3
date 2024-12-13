@@ -1,6 +1,6 @@
 # NFT-Based Ticketing Platform
 
-Welcome to the **NFT-Based Ticketing Platform**, a revolutionary way to buy, sell, and manage event tickets using blockchain technology. Our platform leverages the power of **NFTs (Non-Fungible Tokens)** to provide secure, verifiable, and unique digital tickets, along with exciting **rewards** for every purchase. We also integrate a **decentralized AI chatbot** to assist users with any questions or concerns, ensuring a seamless ticketing experience.
+Welcome to the **NFT-Based Ticketing Platform**, a revolutionary way to buy, sell, and manage event tickets using blockchain technology. Our platform leverages the power of **NFTs (Non-Fungible Tokens)** to provide secure, verifiable, and unique digital tickets, along with exciting **rewards** for every purchase. We also integrate a **decentralized AI chatbot** to assist users with any questions or concerns, ensuring a seamless ticketing experience
 
 ## Project Vision
 
