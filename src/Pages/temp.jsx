@@ -12,7 +12,7 @@ import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db , auth } from "../firebase";
 
 
-const newContractAddress = "0xF1dA7f0d23d75dc63706a4C918eE34A123235720";
+const newContractAddress = "0xAf8D65Ba9f108496dFAD99F007d74d699F750c64";
 
 function Temp({ event, tickets, userName, accountAddress }) {
   const [signerContract, setSignerContract] = useState(null);
