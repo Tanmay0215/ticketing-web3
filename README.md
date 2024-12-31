@@ -62,24 +62,6 @@ A **decentralized AI chatbot** to assist users with any queries or concerns in r
 ## Tech Stack
 
 - **Frontend**: React, Tailwind CSS
-- **Blockchain**: Solidity (Smart Contracts), Remix IDE (Deployment and Testing), AIA blockchain
+- **Blockchain**: Solidity (Smart Contracts), Remix IDE (Deployment and Testing), Flow Asia blockchain
 - **Wallet Integration**: MetaMask
 - **Decentralized AI Chatbot**: [Gaianet.ai](https://www.gaianet.ai/) Decentralized AI chatbot powered by machine learning and blockchain
-
-## Special Links
-
-- [Live Deployment](https://ticketing-aia.teamkamikaze.me/)
-- [Project Presentation](https://docs.google.com/presentation/d/1hxuoIbUcDDBjWdtPJP44c4pOG8dX8dUO/edit?usp=drive_web&ouid=104553686561287705803&rtpof=true)
-- [Project Demo Video](https://www.youtube.com/watch?v=Spng3EtyE2o)
-
-## Contributors
-
-- **Dev Aggarwal**
-  - Contact - +91 9025970630
-  - Email - agr.dev1009@gmail.com
-- **Ayush Singla**
-  - Contact - +91 9416855609
-  - Email - ayushsingla1122@gmail.com
-- **Tanmay Gupta**
-  - Contact - +91 6375405568
-  - Email - tanmaygupta.0215@gmail.com
