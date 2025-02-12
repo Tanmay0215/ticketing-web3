@@ -1,62 +1,37 @@
 import { useContext, useEffect, useState } from "react";
-// import { EventTicketNFTABI } from "../../data";
-// import { neoXNFTAbi } from "../../data";
-// import Web3 from "web3";
-import axios from "axios";
-// import { ethers } from "ethers";
 import { ABI, Address } from "../contract";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore"; 
 import { db , auth } from "../firebase";
+import { PinataSDK } from "pinata-web3";
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 
 
-const newContractAddress = "0xAf8D65Ba9f108496dFAD99F007d74d699F750c64";
+// const newContractAddress = "0xAf8D65Ba9f108496dFAD99F007d74d699F750c64";
 
 function Temp({ event, tickets, userName, accountAddress }) {
   const [signerContract, setSignerContract] = useState(null);
   const {ipfsArray, setIpfsArray} = useContext(AppContext)
   const navigate = useNavigate();
   const IpfsUrlArray = [];
-  const [isMining, setIsMining] = useState(false);
-
+  // const [isMining, setIsMining] = useState(false);
   const provider = new ethers.BrowserProvider(window.ethereum)
-
   const contractABI = ABI;
   const contractAddress = Address;
-
   const contract = new ethers.Contract(contractAddress, contractABI, provider)
+  const pinataJwt = import.meta.env.VITE_REACT_PINATA_JWT_SECRET;
+  const {writeContract, data: hash} = useWriteContract()
+  const {isLoading, isSuccess, isError} = useWaitForTransactionReceipt({
+    hash
+  })
+  const pinata = new PinataSDK({
+    pinataJwt: pinataJwt,
+    pinataGateway: `${import.meta.env.VITE_REACT_PINATA_GATEWAY}`,
+  });
 
-  const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
-  const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
-
-
-  useEffect(() => {
-    const getContractSigner = async () => {
-
-        try {
- 
-
-          await provider.send('eth_requestAccounts', []);
-
-          const signer = await provider.getSigner();
-
-          const contractWithSigner = contract.connect(signer);
-          setSignerContract(contractWithSigner);
-
-          console.log(signer)
-
-
-        } catch (error) {
-          console.error("User denied account access or other error:", error);
-        }
-    };
-
-    getContractSigner();
-  }, []);
-
-
+  
   const deployToIpfs = async() => {
     
     console.log(contract)
@@ -76,7 +51,7 @@ function Temp({ event, tickets, userName, accountAddress }) {
       try {
         
         event.TotalTickets--; 
-  
+        console.log(metadata)
         const metadataIpfsHash = await uploadMetadataToIPFS(metadata);
         console.log('Metadata uploaded to IPFS ticket ',i," :", `https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`);
         IpfsUrlArray.push(`https://gateway.pinata.cloud/ipfs/${metadataIpfsHash}`)
@@ -95,15 +70,18 @@ function Temp({ event, tickets, userName, accountAddress }) {
     const url = import.meta.env.VITE_PINATA_URL;
 
     try {
-      const response = await axios.post(url, metadata, {
-        headers: {
-          'Content-Type': 'application/json',
-          'pinata_api_key': pinataApiKey,
-          'pinata_secret_api_key': pinataApiSecret,
-        },
-      });
+      const response = await pinata.upload.json({
+        eventName: metadata["eventName"],
+        eventDescription: metadata["eventDescription"],
+        eventDate: metadata["eventDate"],
+        eventArtist: metadata["eventArtist"],
+        eventVenue: metadata["eventVenue"],
+        owner: metadata["owner"],
+        ticketNumber: metadata["ticketNumber"],
+        NFTimage:  metadata["NFTimage"]
+      })
 
-      return response.data.IpfsHash;
+      return response.IpfsHash;
 
 
     } catch (error) {
@@ -115,39 +93,16 @@ function Temp({ event, tickets, userName, accountAddress }) {
   const buyTicket = async (eventId, price, array) => {
 
     try {
-    
-    const tx = await signerContract.buyTickets(eventId, tickets, array,{
-      value: ethers.parseEther(price.toString()), // Convert ether to Wei
-    });
-
-    console.log("Transaction sent:", tx);
-
-    // Wait for the transaction to be mined
-    setIsMining(true);
-    const receipt = await tx.wait();
-    setIsMining(false);
-
-    console.log("Transaction mined:", receipt);
-
-      console.log("Ticket purchased:", tx);
-
-      if(tx){
-        return true;
-      }else{
-        return false;
-      }
+      const tx = await writeContract({
+        address: contractAddress,
+        abi: contractABI,
+        functionName: "buyTickets",
+        args: [eventId - 1, tickets, array],
+      });
     } catch (error) {
       console.error("Error buying ticket:", error);
     }
   };
-
-  const navigateToPaymentPage = (successfullTransaction) => {
-    if(successfullTransaction){
-      navigate(`/Payment/${event.id}${1}`)
-    }else{
-      navigate(`/Payment/${event.id}${0}`)
-    }
-  }
 
   async function updateUserNftAndRewardToken(successfullTransaction) {
     try {
@@ -206,23 +161,28 @@ function Temp({ event, tickets, userName, accountAddress }) {
       return
     }
     await deployToIpfs()
+
     const successfullTransaction = await buyTicket(eventId, price, IpfsUrlArray);
-    // const successfullTransaction = true;
-    if(successfullTransaction){
-      console.log(IpfsUrlArray)
-      return updateUserNftAndRewardToken(successfullTransaction);
-    }
-    else{
-      return navigateToPaymentPage(successfullTransaction)
-    }
+
+  }
+
+  if(isSuccess){
+    navigate(`/Payment/${event.id}${1}`)
+    return
+  }
+
+  if(isError){
+    navigate(`/Payment/${event.id}${0}`)
+    return
   }
 
   return (
     <button
       className="py-1 px-4 rounded-lg bg-green-500 text-[24px] text-black font-semibold justify-self-end"
+      disabled={isLoading}
       onClick={() => buyTicketHandeler(event.id, event.Price * tickets)}
     >
-      Buy Ticket
+      {isLoading ? "Transaction in process..." : "Buy Tickets"}
     </button>
   );
 }
