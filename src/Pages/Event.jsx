@@ -46,8 +46,8 @@ const Event = () => {
 
   return (
     <div>
-      <div className="flex">
-        <div className="relative w-1/2 flex justify-end">
+      <div className="flex items-center justify-center">
+        <div className="relative flex justify-end">
           <div className="absolute inset-0 bg-gradient-to-l from-black to-transparent"></div>
           <img
             src={item.Image}
@@ -55,7 +55,7 @@ const Event = () => {
             className="h-screen aspect-2/3 object-cover"
           />
         </div>
-        <div className="max-h-screen flex flex-col gap-y-6 w-1/2 justify-center">
+        <div className="max-h-screen flex flex-col gap-6 w-1/2 justify-center">
           <div className="text-[#FF9011] text-4xl font-semibold uppercase 2xl:text-6xl">
             {item.EventName}
           </div>
@@ -75,10 +75,12 @@ const Event = () => {
             <p className="2xl:text-2xl">
               Price : <span className="text-[#00FF6A]">{item.Price}</span>
             </p>
-            <button className="bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold 2xl:text-xl hover:scale-105 transition-all">
+          </div>
+          <div className='flex flex-col gap-2'>
+            <button className="bg-[#FF9011] w-40 h-10 rounded-md text-black font-semibold 2xl:text-xl hover:scale-105 transition-all">
               <NavLink to={`/Billing/${item.id}`}>BOOK NOW!!</NavLink>
             </button>
-            <button className="bg-[#FF9011] w-40 h-10 rounded-md mt-4 text-black font-semibold 2xl:text-xl">
+            <button className="bg-[#FF9011] w-40 h-10 rounded-md text-black font-semibold 2xl:text-xl">
               <NavLink to={`/Events`}>Go Back</NavLink>
             </button>
           </div>
