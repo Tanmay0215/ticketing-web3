@@ -1,22 +1,15 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import './style.css'
-const EventCard = ({item})=> {
-    return (
-        <div className='flex justify-center items-center'>
-            <div class="relative overflow-hidden w-64">
-                <img src={item.Image} alt="Your Image" className='w-full aspect-2/3'/>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/100 blur"></div>
-            <div className='flex absolute z-50 bottom-14 justify-center items-center w-full'>
-                <div className='text-center text-black text-3xl'>{item.EventName}</div>
-            </div>
-            <div className='absolute bottom-2 right-4'><NavLink className='bg-[#38884A] h-8 w-24 rounded-md p-1' to = {`/event/${item.id}`}>Book Now</NavLink></div>
-        </div>
-        <div className="absolute bottom-2 right-4">
-          <button className="bg-[#38884A] h-10 w-24 rounded-md p-1 text-white">
-            Book Now
-          </button>
-        </div>
+
+const EventCard = ({ item }) => {
+  return (
+    <Link to={`/event/${item.id}`} className="text-white text-2xl font-jaini">
+      {item.Title}
+      <div className="relative overflow-hidden w-64">
+        <img src={item.Image} alt="Your Image" className="h-1/6 aspect-2/3" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/30 blur"></div>
       </div>
-  );
-};
-export default EventCard;
+    </Link>
+  )
+}
+export default EventCard

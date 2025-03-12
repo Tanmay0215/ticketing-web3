@@ -1,4 +1,3 @@
-import React from "react";
 import Slider from "react-slick";
 import SliderCard from "./SliderCard";
 import "slick-carousel/slick/slick.css";
@@ -14,13 +13,13 @@ function MainSlider({ data }) {
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    customPaging: (i) => (
-      <div className="active-one w-4 h-1 rounded-sm bg-gray-300 cursor-pointer mt-6"></div>
+    customPaging: () => (
+      <div className="active-one w-4 h-0.5 rounded-sm bg-gray-300 cursor-pointer mt-6"></div>
     ),
   };
 
   return (
-    <div className="slider-container">
+    <div>
       <Slider {...settings}>
         {data.map((item, index) => (
           <div key={index} className="w-screen">

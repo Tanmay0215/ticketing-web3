@@ -1,4 +1,4 @@
-import { NavLink, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
@@ -78,10 +78,10 @@ const Event = () => {
           </div>
           <div className='flex flex-col gap-2'>
             <button className="bg-[#FF9011] w-40 h-10 rounded-md text-black font-semibold 2xl:text-xl hover:scale-105 transition-all">
-              <NavLink to={`/Billing/${item.id}`}>BOOK NOW!!</NavLink>
+              <Link to={`/Billing/${item.id}`}>BOOK NOW!!</Link>
             </button>
             <button className="bg-[#FF9011] w-40 h-10 rounded-md text-black font-semibold 2xl:text-xl">
-              <NavLink to={`/Events`}>Go Back</NavLink>
+              <Link to={`/events`}>Go Back</Link>
             </button>
           </div>
         </div>
